@@ -1,0 +1,116 @@
+server:
+  port: 3013
+
+spring:
+  application:
+    name: dipol-endereco-service
+  main:
+    banner-mode: "OFF"
+    allow-bean-definition-overriding: true
+  datasource:
+   url: jdbc:postgresql://localhost:5432/gisdb
+   username: postgis
+   password: root
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: false
+        generate_statistics: true
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
+
+logging:
+  level:
+    root: INFO
+    org.keycloak: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.tool.hbm2ddl: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+
+management:
+  endpoints:
+    beans:
+      enabled: false
+    web:
+      exposure:
+        include: health,info
+
+keycloak:
+  enabled: true
+  realm: dipol
+  auth-server-url: http://10.75.200.38:8081/auth
+  ssl-required: external
+  resource: dipol-microservices
+  credentials:
+    secret: b1de7cc3-a17a-4994-b987-a7da9264b95e
+  use-resource-role-mappings: true
+  principal-attribute: preferred_username
+  bearer-only: true
+  cors: true
+  policy-enforcer-config:
+    enforcement-mode: permissive
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: localhost
+  client:
+    enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eurekaUser:eurekaPassword@${eureka.instance.hostname}:8761/eureka/
+
+app:
+  google:
+    api-key: AIzaSyAexZ4KZot11RpJfyR-LeKoKZhuzMOfpSc
+
+---
+spring:
+  profiles: docker
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: ERROR
+    org.hibernate.SQL: ERROR
+    org.hibernate.tool.hbm2ddl: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
+    org.keycloak: ERROR
+    org.springframework.data.elasticsearch.core: ERROR
+  file: /opt/log/${spring.application.name}_${HOSTNAME}.log
+
+keycloak:
+  enabled: true
+  auth-server-url: ${KEYCLOAK_SERVER_URL}
+  resource: ${KEYCLOAK_CLIENT_ID}
+  credentials:
+    secret: ${KEYCLOAK_CLIENT_SECRET}
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+  client:
+    enabled: ${EUREKA_CLIENT_ENABLED:true}
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eurekaUser:eurekaPassword@dipol-cloud-eureka:8761/eureka
+      
+app:
+  google:
+    api-key: ${GOOGLE_API_KEY}

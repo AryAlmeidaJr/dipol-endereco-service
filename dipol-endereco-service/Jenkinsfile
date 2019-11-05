@@ -1,0 +1,7 @@
+#!/usr/bin/env groovy
+@Library("jenkins-library")_
+
+javaPipeline {
+  projectName = "dipol-endereco-service"
+  projectHealthUrl = "localhost:3013/actuator/health"
+}

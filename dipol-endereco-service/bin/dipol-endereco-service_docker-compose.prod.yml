@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  dipol-dominio-service:
+    image: timon.cloud.prodesp.sp.gov.br/0500014/dipol-endereco-service:1.0.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_OPTS=-Xms128m -Xmx128m
+      - KEYCLOAK_SERVER_URL=http://oauth.analitico.policiacivil.sp.gov.br/auth
+      - KEYCLOAK_REALM=dipol
+      - KEYCLOAK_CLIENT_ID=dipol-microservices
+      - "KEYCLOAK_CLIENT_SECRET=6a7d4194-e4d0-4205-9bce-18c9143df0d0"
+      - EUREKA_CLIENT_ENABLED=true
+    ports:
+      - 3013:3013
+    networks:
+      - microservices
+    volumes:
+      - /opt/log:/opt/log
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 200M
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 5
+        window: 120s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        failure_action: continue
+        monitor: 60s
+        max_failure_ratio: 0.5
+      placement:
+        constraints: [node.role == worker]
+
+networks:
+  microservices:
+    driver: overlay

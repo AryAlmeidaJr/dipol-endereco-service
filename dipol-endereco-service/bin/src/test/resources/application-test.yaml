@@ -1,0 +1,18 @@
+spring:
+  data:
+    elasticsearch:
+      cluster-name: ${ELASTICSEARCH_CLUSTER_NAME:docker-cluster}
+      cluster-nodes: ${ELASTICSEARCH_CLUSTER_NODES:localhost:9300}
+  elasticsearch:
+    rest:
+      uris: ${ELASTICSEARCH_REST_URIS:http://localhost:9200}
+  datasource:
+   platform: postgresql
+   driver-class-name: org.postgresql.Driver
+   url: ${DATABASE_URL}
+   username: ${DATABASE_USERNAME}
+   password: ${DATABASE_PASSWORD}
+
+eureka:
+  client:
+    enabled: false

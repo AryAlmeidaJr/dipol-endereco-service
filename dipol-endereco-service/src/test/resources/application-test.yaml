@@ -1,0 +1,13 @@
+spring:
+  datasource:
+   url: ${DATABASE_URL}
+   username: ${DATABASE_USERNAME}
+   password: ${DATABASE_PASSWORD}
+  jpa:
+    show-sql: ${DATABASE_JPA_SHOW_SQL:true}
+    hibernate:
+      ddl-auto: ${DATABASE_JPA_DDL_AUTO:create-drop}
+
+eureka:
+  client:
+    enabled: false
