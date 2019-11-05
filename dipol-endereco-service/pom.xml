@@ -80,10 +80,6 @@
 		</dependency>
 	</dependencies>
 
-	<!-- TODO
-	Remover após migrar as aplicações para o ambiente Kubernetes, pois o Service Mesh Istio será o 
-	substituto natural. Não esquecer de remover as referências do eureka nos arquivos application.yaml.
-	-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
